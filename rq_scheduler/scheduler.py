@@ -140,10 +140,15 @@ class Scheduler(object):
             args = ()
         if kwargs is None:
             kwargs = {}
+
+        serializer = kwargs.pop('serializer', None)
+
         job = self.job_class.create(
                 func, args=args, connection=self.connection,
                 kwargs=kwargs, result_ttl=result_ttl, ttl=ttl, id=id,
-                description=description, timeout=timeout, meta=meta, depends_on=depends_on)
+                description=description, timeout=timeout, meta=meta,
+                depends_on=depends_on, serializer=serializer)
+
         if queue_name:
             job.origin = queue_name
         else:
